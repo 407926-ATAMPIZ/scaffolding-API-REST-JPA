@@ -12,8 +12,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class SpringDocsConfig {
-    @Value("${application")
+public class SpringDocConfig {
+    @Value("${app.url}")
     private String url;
     @Value("${app.dev-name}")
     private String devName;

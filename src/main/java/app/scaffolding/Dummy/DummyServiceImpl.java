@@ -1,13 +1,16 @@
 package app.scaffolding.Dummy;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 /**
  * Clase de servicio de ejemplo para la clase Dummy.
  * Implementa todos los métodos de la interfaz DummyService.
  */
+@Service
 public class DummyServiceImpl implements DummyService{
-
 
     private final DummyRepository dummyRepository;
 

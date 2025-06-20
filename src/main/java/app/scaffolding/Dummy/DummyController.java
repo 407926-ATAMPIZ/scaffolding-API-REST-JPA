@@ -30,7 +30,7 @@ public class DummyController {
         return null;
     }
 
-    @GetMapping
+    @GetMapping("/{id}")
     public ResponseEntity<Dummy> getDummyById(@PathVariable Long id) {
         Dummy dummy = dummyService.getDummyById(id);
         return null;

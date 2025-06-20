@@ -9,7 +9,7 @@ import jakarta.persistence.*;
 public class Dummy {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false)
+    @Column(name = "id", nullable = false)
     private Long id;
 
     private String dummyField;
