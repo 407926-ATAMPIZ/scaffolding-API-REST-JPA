@@ -2,6 +2,7 @@ package app.scaffolding.Dummy;
 
 import app.scaffolding.Dummy.dto.DummyCreateDto;
 import app.scaffolding.Dummy.dto.DummyResponseDto;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,56 +13,68 @@ import java.util.List;
 /**
  * Clase controller de ejemplo. Expone los endpoints de la API REST.
  */
-@RestController
-@RequestMapping("/api/v1/dummies")
+@RestController // Marca la clase como un controller REST, que retorna directamente JSON en las respuestas.
+@RequestMapping("/api/v1/dummies") // Define el prefijo común para todos los endpoints de esta clase.
+@CrossOrigin // Permite peticiones desde otros orígenes (para desarrollo frontend separado).
 public class DummyController {
+
+    // Se usa inyección por constructor en lugar de @Autowired.
+    // Es más seguro (evita nulls), facilita testing, y es la forma recomendada en Spring moderno.
     private final DummyService dummyService;
 
-    //En lugar de usar @Autowired, se utiliza la inyección de dependencias a través del constructor.
-    // Esto es para evitar problemas de inicialización (null pointer exceptions) y para facilitar las pruebas unitarias.
-    // Al hacerlo en el constructor, Spring se encargará de inyectar la instancia de DummyService cuando se cree una instancia de DummyController.
-    // Esto hace obligatoria la inyección de DummyService al crear DummyController, lo que mejora la claridad del código y la gestión de dependencias.
-    // Si quisieramos que la dependencia fuera opcional, puede usarse inyección de dependencias a través de un setter o un metodo específico.
+    // Inyección por constructor recomendada para claridad y testeo.
     public DummyController(final DummyService dummyService) {
         this.dummyService = dummyService;
     }
 
     // Aquí se pueden definir los endpoints de la API REST utilizando anotaciones como @GetMapping, @PostMapping, etc.
     // Ejemplo de un endpoint:
+    @Operation(summary = "Lista todos los dummies presentes en la db") //@Operation mejora la documentación Swagger.
     @GetMapping
     public ResponseEntity<List<DummyResponseDto>> getAll() {
         List<DummyResponseDto> dummyList = dummyService.getAll();
         return ResponseEntity.ok(dummyList);
     }
 
+    @Operation(summary = "Busca un dummy por id en la db")
     @GetMapping("/{id}")
-    public ResponseEntity<DummyResponseDto> getById(@PathVariable Long id) {
+    public ResponseEntity<DummyResponseDto> getById(
+            @PathVariable Long id) {
         DummyResponseDto dummy = dummyService.getById(id);
         if (dummy != null) {
-            return ResponseEntity.ok().body(dummy);
+            return ResponseEntity.ok().body(dummy); // 200 OK si existe
         }
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.notFound().build(); // 404 Not Found si no existe
     }
 
+    @Operation(summary = "Crea un nuevo dummy y lo persiste en la db")
     @PostMapping
-    public ResponseEntity<DummyResponseDto> create(@Valid DummyCreateDto dummyDto) {
-        DummyResponseDto createdDummy = dummyService.create(dummyDto);
-        if (createdDummy != null) {
-            URI location = URI.create("/api/v1/dummies/" + createdDummy.getId());
-            return ResponseEntity.created(location).body(createdDummy);
-        }
-        return ResponseEntity.internalServerError().build();
+    public ResponseEntity<DummyResponseDto> create(
+            @RequestBody @Valid DummyCreateDto dummyDto) { //@Valid valida que los datos del body cumplan con las restricciones del DTO.
+        DummyResponseDto created = dummyService.create(dummyDto);
+        URI location = URI.create("/api/v1/dummies/" + created.getId());
+        return ResponseEntity.created(location).body(created); // 201 Created con header Location, que es lo correcto según el estándar REST.
     }
 
-    @PutMapping
-    public ResponseEntity<DummyResponseDto> update(DummyCreateDto dummyDto) {
-        DummyResponseDto updatedDummy = dummyService.update(dummyDto);
+
+    @Operation(summary = "Actualiza completamente un dummy; todos los campos son requeridos")
+    @PutMapping("/{id}")
+    public ResponseEntity<DummyResponseDto> update(
+            @PathVariable Long id,
+            @RequestBody @Valid DummyCreateDto dummyDto) { //Se usa el mismo DTO que en POST, con todos los campos requeridos → implica reemplazo completo (semántica de PUT).
+        DummyResponseDto updatedDummy = dummyService.update(id, dummyDto);
         return ResponseEntity.ok().body(updatedDummy);
     }
 
+    @Operation(summary = "Elimina un dummy de la db")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         dummyService.delete(id);
-        return null;
+        return ResponseEntity.noContent().build(); // 204 No Content si se elimina correctamente. La acción fue exitosa, y no hay más que decir
     }
 }
+//REGLA DE OROOO aaaAA
+//Tipo de parámetro	        Anotación	                        Excepción lanzada
+//Objeto (@RequestBody)	    @Valid	                            MethodArgumentNotValidException
+//Parámetro simple	        @Min, @NotNull, etc. + @Validated	ConstraintViolationException
+

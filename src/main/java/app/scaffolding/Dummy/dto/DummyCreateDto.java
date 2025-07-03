@@ -1,10 +1,13 @@
 package app.scaffolding.Dummy.dto;
 
 import app.scaffolding.Dummy.Dummy;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
@@ -15,8 +18,11 @@ import java.io.Serializable;
  */
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class DummyCreateDto implements Serializable {
     @Size(message = "Este campo debe tener entre 1 y 10 digitos", min = 1, max = 10)
     @NotBlank(message = "Este campo es obligatorio")
+    @JsonProperty("dummy_field")
     String dummyField;
 }
