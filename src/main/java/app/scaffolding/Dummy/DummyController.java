@@ -3,13 +3,14 @@ package app.scaffolding.Dummy;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 
 /**
  * Clase controller de ejemplo. Expone los endpoints de la API REST.
  */
 @RestController
-@RequestMapping("/api/v1/dummy")
+@RequestMapping("/api/v1/dummies")
 public class DummyController {
     private final DummyService dummyService;
 
@@ -33,13 +34,17 @@ public class DummyController {
     @GetMapping("/{id}")
     public ResponseEntity<Dummy> getDummyById(@PathVariable Long id) {
         Dummy dummy = dummyService.getDummyById(id);
-        return null;
+        if (dummy != null) {
+            return ResponseEntity.ok().body(dummy);
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @PostMapping
     public ResponseEntity<Dummy> createDummy(DummyDto dummyDto) {
-        Dummy dummy = dummyService.createDummy(dummyDto);
-        return null;
+        Dummy createdDummy = dummyService.createDummy(dummyDto);
+        URI location = URI.create("/api/v1/dummies/" + createdDummy.getId());
+        return ResponseEntity.created(location).body(createdDummy);
     }
 
     @PutMapping
