@@ -1,5 +1,6 @@
-package app.scaffolding.Dummy;
+package app.scaffolding.Dummy.dto;
 
+import app.scaffolding.Dummy.Dummy;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
@@ -14,7 +15,7 @@ import java.io.Serializable;
  */
 @Data
 @Builder
-public class DummyDto implements Serializable {
+public class DummyCreateDto implements Serializable {
     @Size(message = "Este campo debe tener entre 1 y 10 digitos", min = 1, max = 10)
     @NotBlank(message = "Este campo es obligatorio")
     String dummyField;

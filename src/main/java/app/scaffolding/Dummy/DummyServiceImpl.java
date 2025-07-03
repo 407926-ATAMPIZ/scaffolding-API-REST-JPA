@@ -1,6 +1,7 @@
 package app.scaffolding.Dummy;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import app.scaffolding.Dummy.dto.DummyCreateDto;
+import app.scaffolding.Dummy.dto.DummyResponseDto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.List;
  * Implementa todos los métodos de la interfaz DummyService.
  */
 @Service
-public class DummyServiceImpl implements DummyService{
+public class DummyServiceImpl implements DummyService {
 
     private final DummyRepository dummyRepository;
 
@@ -19,27 +20,29 @@ public class DummyServiceImpl implements DummyService{
     }
 
     @Override
-    public List<Dummy> getDummy() {
+    public List<DummyResponseDto> getAll() {
+        List<Dummy> dummyList = dummyRepository.findAll();
+
         return null;
     }
 
     @Override
-    public Dummy getDummyById(Long id) {
+    public DummyResponseDto getById(Long id) {
         return null;
     }
 
     @Override
-    public Dummy createDummy(DummyDto dummyDto) {
+    public DummyResponseDto create(DummyCreateDto dummyDto) {
         return null;
     }
 
     @Override
-    public Dummy updateDummy(DummyDto dummyDto) {
+    public DummyResponseDto update(DummyCreateDto dummyDto) {
         return null;
     }
 
     @Override
-    public void deleteDummy(Long id) {
+    public void delete(Long id) {
 
     }
 }

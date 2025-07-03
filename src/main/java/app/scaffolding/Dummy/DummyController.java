@@ -1,5 +1,8 @@
 package app.scaffolding.Dummy;
 
+import app.scaffolding.Dummy.dto.DummyCreateDto;
+import app.scaffolding.Dummy.dto.DummyResponseDto;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,14 +29,14 @@ public class DummyController {
     // Aquí se pueden definir los endpoints de la API REST utilizando anotaciones como @GetMapping, @PostMapping, etc.
     // Ejemplo de un endpoint:
     @GetMapping
-    public ResponseEntity<Dummy> getDummy() {
-        List<Dummy> dummyList = dummyService.getDummy();
-        return null;
+    public ResponseEntity<List<DummyResponseDto>> getAll() {
+        List<DummyResponseDto> dummyList = dummyService.getAll();
+        return ResponseEntity.ok(dummyList);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Dummy> getDummyById(@PathVariable Long id) {
-        Dummy dummy = dummyService.getDummyById(id);
+    public ResponseEntity<DummyResponseDto> getById(@PathVariable Long id) {
+        DummyResponseDto dummy = dummyService.getById(id);
         if (dummy != null) {
             return ResponseEntity.ok().body(dummy);
         }
@@ -41,21 +44,24 @@ public class DummyController {
     }
 
     @PostMapping
-    public ResponseEntity<Dummy> createDummy(DummyDto dummyDto) {
-        Dummy createdDummy = dummyService.createDummy(dummyDto);
-        URI location = URI.create("/api/v1/dummies/" + createdDummy.getId());
-        return ResponseEntity.created(location).body(createdDummy);
+    public ResponseEntity<DummyResponseDto> create(@Valid DummyCreateDto dummyDto) {
+        DummyResponseDto createdDummy = dummyService.create(dummyDto);
+        if (createdDummy != null) {
+            URI location = URI.create("/api/v1/dummies/" + createdDummy.getId());
+            return ResponseEntity.created(location).body(createdDummy);
+        }
+        return ResponseEntity.internalServerError().build();
     }
 
     @PutMapping
-    public ResponseEntity<Dummy> updateDummy(DummyDto dummyDto) {
-        Dummy dummy = dummyService.updateDummy(dummyDto);
-        return null;
+    public ResponseEntity<DummyResponseDto> update(DummyCreateDto dummyDto) {
+        DummyResponseDto updatedDummy = dummyService.update(dummyDto);
+        return ResponseEntity.ok().body(updatedDummy);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteDummy(@PathVariable Long id) {
-        dummyService.deleteDummy(id);
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        dummyService.delete(id);
         return null;
     }
 }

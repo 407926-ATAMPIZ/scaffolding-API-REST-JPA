@@ -1,6 +1,7 @@
 package app.scaffolding.Dummy;
 
-import org.springframework.stereotype.Service;
+import app.scaffolding.Dummy.dto.DummyCreateDto;
+import app.scaffolding.Dummy.dto.DummyResponseDto;
 
 import java.util.List;
 
@@ -9,13 +10,13 @@ import java.util.List;
  * Esta interfaz define los métodos que deben ser implementados por cualquier clase que la implemente.
  */
 public interface DummyService {
-    List<Dummy> getDummy();
+    List<DummyResponseDto> getAll();
 
-    Dummy getDummyById(Long id);
+    DummyResponseDto getById(Long id);
 
-    Dummy createDummy(DummyDto dummyDto);
+    DummyResponseDto create(DummyCreateDto dummyDto);
 
-    Dummy updateDummy(DummyDto dummyDto);
+    DummyResponseDto update(DummyCreateDto dummyDto);
 
-    void deleteDummy(Long id);
+    void delete(Long id);
 }
