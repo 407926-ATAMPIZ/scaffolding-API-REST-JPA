@@ -41,10 +41,7 @@ public class DummyController {
     public ResponseEntity<DummyResponseDto> getById(
             @PathVariable Long id) {
         DummyResponseDto dummy = dummyService.getById(id);
-        if (dummy != null) {
-            return ResponseEntity.ok().body(dummy); // 200 OK si existe
-        }
-        return ResponseEntity.notFound().build(); // 404 Not Found si no existe
+        return ResponseEntity.ok().body(dummy); // 200 OK si existe
     }
 
     @Operation(summary = "Crea un nuevo dummy y lo persiste en la db")
@@ -63,7 +60,7 @@ public class DummyController {
             @PathVariable Long id,
             @RequestBody @Valid DummyCreateDto dummyDto) { //Se usa el mismo DTO que en POST, con todos los campos requeridos → implica reemplazo completo (semántica de PUT).
         DummyResponseDto updatedDummy = dummyService.update(id, dummyDto);
-        return ResponseEntity.ok().body(updatedDummy);
+        return ResponseEntity.ok().body(updatedDummy); // 200 OK si existe
     }
 
     @Operation(summary = "Elimina un dummy de la db")

@@ -68,6 +68,13 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
+    //handler para excepciones por entidades no existentes
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ApiError> handleInvalidJsonBody(ResourceNotFoundException exception) {
+        ApiError error = buildApiError(exception, HttpStatus.BAD_REQUEST);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
+
 
     private ApiError buildApiError(Exception exception, HttpStatus httpStatus) {
         return ApiError.builder()

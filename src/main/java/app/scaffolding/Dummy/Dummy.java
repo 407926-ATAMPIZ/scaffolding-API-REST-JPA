@@ -3,6 +3,8 @@ package app.scaffolding.Dummy;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
+
 /**
  * Clase de dominio o entidad de ejemplo. Representa una tabla de la base de datos
  */
@@ -19,5 +21,8 @@ public class Dummy {
     private Long id;
     @Column(name = "dummy_field", nullable = false)
     private String dummyField;
+
+    @Column(name = "dummy_fecha", nullable = false)
+    private LocalDate dummyFecha;
 
 }

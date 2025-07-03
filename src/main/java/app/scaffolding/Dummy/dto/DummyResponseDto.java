@@ -1,6 +1,7 @@
 package app.scaffolding.Dummy.dto;
 
 import app.scaffolding.Dummy.Dummy;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 
 /**
  * Dto de ejemplo de la clase Dummy.
@@ -23,4 +25,7 @@ public class DummyResponseDto implements Serializable {
     Long id;
     @JsonProperty("dummy_field")
     String dummyField;
+    @JsonProperty("fecha") //nombre alternativo al/del que se serializa/deserializa en JSON
+    @JsonFormat(pattern = "yyyy-MM-dd") //formato al/del que se serializa/deserializa en JSON (MM MES, EN MINUSCULA ES MINUTOS)
+    private LocalDate dummyFecha;
 }
