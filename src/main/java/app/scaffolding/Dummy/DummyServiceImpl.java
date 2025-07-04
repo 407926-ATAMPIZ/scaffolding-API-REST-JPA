@@ -25,43 +25,25 @@ public class DummyServiceImpl implements DummyService {
     public List<DummyResponseDto> getAll() {
         List<Dummy> dummyList = dummyRepository.findAll();
         List<DummyResponseDto> dummyResponseDtoList = dummyList.stream().
-                map(o -> {
-                    DummyResponseDto mapped = DummyResponseDto.builder()
-                            .id(o.getId())
-                            .dummyField(o.getDummyField())
-                            .dummyFecha(o.getDummyFecha())
-                            .build();
-                    return mapped;
-                }).toList();
+                map(this::toResponseDto).toList();
         return dummyResponseDtoList;
     }
 
     @Override
     public DummyResponseDto getById(Long id) {
         Dummy dummy = dummyRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Dummy con id " + id + " no encontrado."));
-        DummyResponseDto mapped = DummyResponseDto.builder()
-                .id(dummy.getId())
-                .dummyField(dummy.getDummyField())
-                .dummyFecha(dummy.getDummyFecha())
-                .build();
+        DummyResponseDto mapped = this.toResponseDto(dummy);
         return mapped;
     }
 
     @Override
     public DummyResponseDto create(DummyCreateDto dummyDto) {
         //mapear a entity
-        Dummy dummy = Dummy.builder()
-                .dummyField(dummyDto.getDummyField())
-                .dummyFecha(LocalDate.now())
-                .build();
+        Dummy dummy = this.toDummy(dummyDto);
         //guardar
         dummy = dummyRepository.save(dummy);
         //mapear a dto
-        DummyResponseDto mapped = DummyResponseDto.builder()
-                .id(dummy.getId())
-                .dummyField(dummy.getDummyField())
-                .dummyFecha(dummy.getDummyFecha())
-                .build();
+        DummyResponseDto mapped = this.toResponseDto(dummy);
         //retornar
         return mapped;
     }
@@ -75,11 +57,7 @@ public class DummyServiceImpl implements DummyService {
         //guardar
         dummy = dummyRepository.save(dummy);
         //mapear
-        DummyResponseDto mapped = DummyResponseDto.builder()
-                .id(dummy.getId())
-                .dummyField(dummy.getDummyField())
-                .dummyFecha(dummy.getDummyFecha())
-                .build();
+        DummyResponseDto mapped = this.toResponseDto(dummy);
         //retornar
         return mapped;
     }
@@ -90,5 +68,13 @@ public class DummyServiceImpl implements DummyService {
         Dummy dummy = dummyRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Dummy con id " + id + " no encontrado."));
         //eliminar
         dummyRepository.delete(dummy);
+    }
+
+    private DummyResponseDto toResponseDto(Dummy dummy) {
+        return DummyResponseDto.builder().id(dummy.getId()).dummyField(dummy.getDummyField()).dummyFecha(dummy.getDummyFecha()).build();
+    }
+
+    private Dummy toDummy(DummyCreateDto dummyCreateDto) {
+        return Dummy.builder().dummyField(dummyCreateDto.getDummyField()).build();
     }
 }

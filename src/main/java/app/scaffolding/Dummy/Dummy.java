@@ -1,5 +1,6 @@
 package app.scaffolding.Dummy;
 
+import app.scaffolding.Dummy.dto.DummyResponseDto;
 import jakarta.persistence.*;
 import lombok.*;
 
