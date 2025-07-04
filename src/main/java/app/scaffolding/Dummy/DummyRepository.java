@@ -11,10 +11,4 @@ import java.util.List;
  */
 @Repository
 public interface DummyRepository extends JpaRepository<Dummy, Long> {
-    List<Dummy> findByDummyFieldContaining(String dummyField);
-
-    List<Dummy> findByDummyFechaBefore(LocalDate fecha);
-
-    List<Dummy> findByDummyFieldContainingAndDummyFechaBefore(String dummyField, LocalDate fecha);
-
 }

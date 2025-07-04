@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Clase de servicio de ejemplo para la clase Dummy.
@@ -77,16 +78,12 @@ public class DummyServiceImpl implements DummyService {
      */
     @Override
     public List<DummyResponseDto> search(String dummyField, LocalDate fromDate) {
-        List<Dummy> dummyList;
-        if(dummyField != null && fromDate != null) {
-            dummyList = dummyRepository.findByDummyFieldContainingAndDummyFechaBefore(dummyField, fromDate);
-        }else if(dummyField == null && fromDate == null) {
-            return getAll();
-        }else if(dummyField != null){
-            dummyList = dummyRepository.findByDummyFieldContaining(dummyField);
-        }else {
-            dummyList = dummyRepository.findByDummyFechaBefore(fromDate);
-        }
+        List<Dummy> dummyList = dummyRepository.findAll().stream()
+                .filter(dummy ->
+                        dummyField == null || Objects.equals(dummy.getDummyField(), dummyField))
+                .filter(dummy ->
+                        fromDate == null || dummy.getDummyFecha().isAfter(fromDate))
+                .toList();
         return dummyList.stream().map(this::toResponseDto).toList();
     }
 

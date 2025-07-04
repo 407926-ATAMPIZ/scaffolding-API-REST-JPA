@@ -8,6 +8,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.net.URI;
 import java.time.LocalDate;
 import java.util.List;
@@ -46,12 +47,14 @@ public class DummyController {
         return ResponseEntity.ok().body(dummy); // 200 OK si existe
     }
 
-    @GetMapping("/search")
+    @GetMapping("search")
     public ResponseEntity<List<DummyResponseDto>> searchDummies(
             @RequestParam(required = false) String dummyField,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromDate
     ) {
         List<DummyResponseDto> result = dummyService.search(dummyField, fromDate);
+        BigDecimal uno = new BigDecimal(1);
+        BigDecimal dos = new BigDecimal(2);
         return ResponseEntity.ok(result);
     }
 

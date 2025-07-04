@@ -36,11 +36,12 @@ class DummyControllerTest {
 
     @Test
     void getAll_shouldReturnListOfDummies() throws Exception {
+        //Arrange
         DummyResponseDto dummy1 = DummyResponseDto.builder().id(1L).dummyField("unDummy").build();
         DummyResponseDto dummy2 = DummyResponseDto.builder().id(2L).dummyField("otroDummy").build();
-
         // Testea Que el endpoint /api/v1/dummies devuelva una lista con los elementos mockeados.
         when(dummyService.getAll()).thenReturn(List.of(dummy1, dummy2));
+        //Act y Assert
         mockMvc.perform(get("/api/v1/dummies"))
                 .andExpect(status().isOk())
                 // Verifica que efectivamente devuelve dos objetos, lo cual prueba la respuesta JSON por el largo.
