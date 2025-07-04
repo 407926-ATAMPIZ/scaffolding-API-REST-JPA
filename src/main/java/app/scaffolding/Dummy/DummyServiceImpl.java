@@ -70,11 +70,31 @@ public class DummyServiceImpl implements DummyService {
         dummyRepository.delete(dummy);
     }
 
+    /**
+     * @param dummyField
+     * @param fromDate
+     * @return
+     */
+    @Override
+    public List<DummyResponseDto> search(String dummyField, LocalDate fromDate) {
+        List<Dummy> dummyList;
+        if(dummyField != null && fromDate != null) {
+            dummyList = dummyRepository.findByDummyFieldContainingAndDummyFechaBefore(dummyField, fromDate);
+        }else if(dummyField == null && fromDate == null) {
+            return getAll();
+        }else if(dummyField != null){
+            dummyList = dummyRepository.findByDummyFieldContaining(dummyField);
+        }else {
+            dummyList = dummyRepository.findByDummyFechaBefore(fromDate);
+        }
+        return dummyList.stream().map(this::toResponseDto).toList();
+    }
+
     private DummyResponseDto toResponseDto(Dummy dummy) {
         return DummyResponseDto.builder().id(dummy.getId()).dummyField(dummy.getDummyField()).dummyFecha(dummy.getDummyFecha()).build();
     }
 
     private Dummy toDummy(DummyCreateDto dummyCreateDto) {
-        return Dummy.builder().dummyField(dummyCreateDto.getDummyField()).build();
+        return Dummy.builder().dummyField(dummyCreateDto.getDummyField()).dummyFecha(LocalDate.now()).build();
     }
 }
