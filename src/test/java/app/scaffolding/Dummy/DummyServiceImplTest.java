@@ -2,6 +2,7 @@ package app.scaffolding.Dummy;
 
 import app.scaffolding.Dummy.dto.DummyCreateDto;
 import app.scaffolding.Dummy.dto.DummyResponseDto;
+import app.scaffolding.common.Calidad;
 import app.scaffolding.common.ResourceNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,8 +29,8 @@ class DummyServiceImplTest {
     @Test
     void getAll_shouldReturnAllDummys() {
         // Arrange: armamos dummys simulados que devuelve el repo
-        Dummy dummy = Dummy.builder().id(1L).dummyField("dummy1").build();
-        Dummy dummy2 = Dummy.builder().id(2L).dummyField("dummy2").build();
+        Dummy dummy = Dummy.builder().id(1L).dummyField("dummy1").calidad(Calidad.BASICO).build();
+        Dummy dummy2 = Dummy.builder().id(2L).dummyField("dummy2").calidad(Calidad.BASICO).build();
         List<Dummy> dummyList = List.of(dummy, dummy2);
         // asignamos comportamiento al mock del repo
         when(dummyRepository.findAll()).thenReturn(dummyList);
@@ -38,7 +39,9 @@ class DummyServiceImplTest {
         // Assert: Verificar que se hayan hecho bien los mapeos
         assertEquals(2, result.size());
         assertEquals("dummy1", result.get(0).getDummyField());
+        assertEquals(Calidad.BASICO, result.get(0).getCalidad());
         assertEquals("dummy2", result.get(1).getDummyField());
+        assertEquals(Calidad.BASICO, result.get(1).getCalidad());
     }
 
     @Test

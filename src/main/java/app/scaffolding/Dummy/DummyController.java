@@ -2,6 +2,7 @@ package app.scaffolding.Dummy;
 
 import app.scaffolding.Dummy.dto.DummyCreateDto;
 import app.scaffolding.Dummy.dto.DummyResponseDto;
+import app.scaffolding.common.Calidad;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -50,9 +51,10 @@ public class DummyController {
     @GetMapping("search")
     public ResponseEntity<List<DummyResponseDto>> searchDummies(
             @RequestParam(required = false) String dummyField,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromDate
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromDate,
+            @RequestParam(required = false) Calidad calidad
     ) {
-        List<DummyResponseDto> result = dummyService.search(dummyField, fromDate);
+        List<DummyResponseDto> result = dummyService.search(dummyField, fromDate, calidad);
         BigDecimal uno = new BigDecimal(1);
         BigDecimal dos = new BigDecimal(2);
         return ResponseEntity.ok(result);

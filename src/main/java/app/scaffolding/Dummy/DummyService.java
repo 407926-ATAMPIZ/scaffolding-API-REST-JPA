@@ -2,6 +2,7 @@ package app.scaffolding.Dummy;
 
 import app.scaffolding.Dummy.dto.DummyCreateDto;
 import app.scaffolding.Dummy.dto.DummyResponseDto;
+import app.scaffolding.common.Calidad;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -23,5 +24,5 @@ public interface DummyService {
 
     void delete(Long id);
 
-    List<DummyResponseDto> search(String dummyField, LocalDate fromDate);
+    List<DummyResponseDto> search(String dummyField, LocalDate fromDate, Calidad calidad);
 }

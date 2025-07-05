@@ -2,6 +2,7 @@ package app.scaffolding.Dummy;
 
 import app.scaffolding.Dummy.dto.DummyCreateDto;
 import app.scaffolding.Dummy.dto.DummyResponseDto;
+import app.scaffolding.common.Calidad;
 import app.scaffolding.common.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -77,21 +78,23 @@ public class DummyServiceImpl implements DummyService {
      * @return
      */
     @Override
-    public List<DummyResponseDto> search(String dummyField, LocalDate fromDate) {
+    public List<DummyResponseDto> search(String dummyField, LocalDate fromDate, Calidad calidad) {
         List<Dummy> dummyList = dummyRepository.findAll().stream()
                 .filter(dummy ->
                         dummyField == null || Objects.equals(dummy.getDummyField(), dummyField))
                 .filter(dummy ->
                         fromDate == null || dummy.getDummyFecha().isAfter(fromDate))
+                .filter(dummy ->
+                        calidad == null || dummy.getCalidad()==calidad)
                 .toList();
         return dummyList.stream().map(this::toResponseDto).toList();
     }
 
     private DummyResponseDto toResponseDto(Dummy dummy) {
-        return DummyResponseDto.builder().id(dummy.getId()).dummyField(dummy.getDummyField()).dummyFecha(dummy.getDummyFecha()).build();
+        return DummyResponseDto.builder().id(dummy.getId()).calidad(dummy.getCalidad()).dummyField(dummy.getDummyField()).dummyFecha(dummy.getDummyFecha()).build();
     }
 
     private Dummy toDummy(DummyCreateDto dummyCreateDto) {
-        return Dummy.builder().dummyField(dummyCreateDto.getDummyField()).dummyFecha(LocalDate.now()).build();
+        return Dummy.builder().dummyField(dummyCreateDto.getDummyField()).calidad(dummyCreateDto.getCalidad()).dummyFecha(LocalDate.now()).build();
     }
 }
