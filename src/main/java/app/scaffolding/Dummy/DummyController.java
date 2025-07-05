@@ -55,8 +55,6 @@ public class DummyController {
             @RequestParam(required = false) Calidad calidad
     ) {
         List<DummyResponseDto> result = dummyService.search(dummyField, fromDate, calidad);
-        BigDecimal uno = new BigDecimal(1);
-        BigDecimal dos = new BigDecimal(2);
         return ResponseEntity.ok(result);
     }
 
